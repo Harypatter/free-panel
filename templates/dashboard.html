@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>داشبورد مدیریت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-10">
+    <div class="max-w-3xl mx-auto space-y-8">
+        
+        <div class="bg-white p-8 rounded shadow-lg">
+            <div class="flex justify-between mb-6 border-b pb-4">
+                <h1 class="text-2xl font-bold">تنظیمات اپلیکیشن</h1>
+                <a href="/admin/logout" class="text-red-500">خروج</a>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="bg-blue-100 text-blue-700 p-3 rounded mb-4">{{ messages[0] }}</div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="mb-4">
+                    <label class="block font-bold mb-2">متن برنامه</label>
+                    <textarea name="app_text" class="w-full border p-2 rounded h-24">{{ settings.app_text }}</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block font-bold mb-2">کانفیگ‌ها (V2ray)</label>
+                    <textarea name="v2ray_configs" class="w-full border p-2 rounded h-32 font-mono text-sm bg-gray-50">{{ settings.v2ray_configs }}</textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-blue-50 p-4 rounded">
+                        <label class="block font-bold mb-2">نسخه منسوخ</label>
+                        <input type="text" name="deprecated_version" value="{{ settings.deprecated_version }}" class="w-full border p-2 rounded text-left" dir="ltr">
+                    </div>
+
+                    <div class="bg-red-50 p-4 rounded flex items-center">
+                        <input type="checkbox" name="force_update" id="force" class="w-5 h-5 ml-2" {% if settings.force_update %}checked{% endif %}>
+                        <label for="force" class="font-bold cursor-pointer select-none">آپدیت اجباری</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 rounded hover:bg-green-700">ذخیره تنظیمات</button>
+            </form>
+        </div>
+
+        <div class="bg-white p-8 rounded shadow-lg border-t-4 border-yellow-500">
+            <h2 class="text-xl font-bold mb-4">📢 ارسال نوتیفیکیشن همگانی</h2>
+            <form method="POST">
+                <input type="hidden" name="send_notification" value="true">
+                
+                <div class="mb-4">
+                    <label class="block font-bold mb-2">عنوان پیام</label>
+                    <input type="text" name="notif_title" placeholder="مثلا: نسخه جدید منتشر شد" class="w-full border p-2 rounded" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block font-bold mb-2">متن پیام</label>
+                    <textarea name="notif_body" placeholder="متن پیام خود را اینجا بنویسید..." class="w-full border p-2 rounded h-24" required></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-yellow-600 text-white font-bold py-3 rounded hover:bg-yellow-700">ارسال به همه کاربران</button>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>
